@@ -1,0 +1,32 @@
+artifacts = ["/app/report.json"]
+
+[task]
+name = "dynamo/log-report"
+description = "Parse an Apache-style access log into a small JSON summary report."
+
+[metadata]
+category = "data_processing_and_etl"
+subcategory = "text_processing"
+task_objective = ["transform", "generate"]
+artifact_type = ["text_or_log_file", "generated_output_artifact"]
+expert_time_estimate_hours = 0.3
+model_tested = "GPT-5.4"
+agent_tested = "Terminus-2"
+difficulty_explanation = "The task is straightforward: parse a small Apache-style access log, count requests and unique client IPs, and identify the most-requested path with a deterministic tie-break rule."
+solution_explanation = "The reference solution reads /app/access.log, skips empty lines, counts total requests, tracks distinct first-column client IPs, counts requested URL paths from HTTP request strings, applies the first-seen tie-break, and writes /app/report.json."
+verification_explanation = "The verifier runs pytest against /tests/test_outputs.py and checks that /app/report.json exists, is valid JSON, has exactly the requested keys, and contains the exact values computed from /app/access.log."
+
+[verifier]
+timeout_sec = 120.0
+
+[agent]
+timeout_sec = 120.0
+
+[environment]
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+allow_internet = false
+mcp_servers = []
